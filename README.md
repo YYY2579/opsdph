@@ -1,72 +1,49 @@
-# DeepSeek Harness
+# DeepSeek Harness — Ops Fork（运维二开版）
 
 English | [中文](README.zh.md)
 
-DeepSeek Harness (`dsh`) is an open-source agent harness developed by [DeepSeek AI](https://deepseek.com).
+This repository is a private secondary-development (二开) fork of [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness).
 
-It is built on an **everything-is-a-plugin** architecture and powered by [Cordis](https://github.com/cordiverse/cordis), whose design is described in [_A Programming Paradigm for Spatiotemporal Composability_](https://arxiv.org/abs/2608.25512).
+It is frozen at upstream commit `c291e7961a515f6d7af9304e7fd1d257929aef26` (`0.1.5-rc.2`) and does not track upstream; any upgrade is a deliberate, gated act (see [ops/DEVELOPMENT.md](ops/DEVELOPMENT.md)).
 
-Documentation: [https://deepseek-harness.github.io/deepseek-harness/](https://deepseek-harness.github.io/deepseek-harness/)
+## What this fork adds
 
-## Developer preview
+The fork adds an ops (运维) capability as new plugin packages under `packages/ops`, without modifying any upstream package:
 
-DeepSeek Harness is in _developer preview_ and iterating rapidly. **THERE WILL BE COMPATIBILITY-BREAKING CHANGES.**
+- `packages/ops/common` — shared ops types: target identity, environment, risk level, result envelopes.
+- `packages/ops/server` — managed-server inventory and model-facing tools:
+  - `server_list` / `server_facts` / `server_file_read` — read-only, run automatically.
+  - `server_exec` — risk-gated: L0 read-only commands run automatically; L1 and above ask through the approval seam, and a missing approval fails closed.
+- Remote transport is the host OpenSSH client; credentials stay references, never values.
 
-Review the [safety notice](SAFETY.md) before running the project.
+## Documentation
 
-## Run
+- [ops/SETUP.md](ops/SETUP.md) — local environment, proxy, credentials, known issues
+- [ops/DEVELOPMENT.md](ops/DEVELOPMENT.md) — version freeze, repository constraints, development order, acceptance
+- [ops/TASKS.md](ops/TASKS.md) — full task checklist and current progress
+- [ops/ARCHITECTURE.md](ops/ARCHITECTURE.md) — the harness extension points the ops capability uses, and the ones it does not
+- [ops/ROADMAP.md](ops/ROADMAP.md) — planned capabilities and their acceptance
+- [packages/ops/AGENTS.md](packages/ops/AGENTS.md) — hard rules for changing this group's code
 
-### Run from `npm`
+The upstream harness documentation remains in `docs/` for reference.
 
-Install `Node.js`, then run:
+## Run from source
 
 ```sh
-npx @deepseek-ai/dsh web
-```
-
-The command starts the Web UI at `http://127.0.0.1:3080` by default and opens it in the default browser for a local launch. An SSH launch only prints the host URL because the SSH client or editor owns the local forwarded address. Pass `--no-open` to run the server without opening a browser. See [Web UI guide](docs/user/guide/index.md).
-
-### Run from source
-
-To run from a repository checkout:
-
-```sh
-git clone https://github.com/deepseek-ai/deepseek-harness.git
+git clone https://github.com/YYY2579/opsdph.git deepseek-harness
 cd deepseek-harness
 pnpm install
 pnpm run build
 pnpm dsh web
 ```
 
-`pnpm run build` prepares the repository artifacts. `pnpm dsh web` uses those built artifacts without rebuilding.
-
-## Community and support
-
-- Submit feedback or bug reports through [GitHub Discussions](https://github.com/deepseek-ai/deepseek-harness/discussions).
-- Add the [`dsh-plugin`](https://github.com/topics/dsh-plugin) topic to your plugin repository for discoverability.
-- Join <a href="https://discord.gg/Ycq5dCaS4">DeepSeek Harness Discord community</a>.
-
-## Contributing
-
-See [CONTRIBUTING.md](CONTRIBUTING.md).
+`pnpm run build` prepares the repository artifacts. `pnpm dsh web` uses the built artifacts without rebuilding.
 
 ## Development
 
-Start with the [development guide](docs/development.md) and [architecture documentation](docs/architecture.md).
+Start with [ops/DEVELOPMENT.md](ops/DEVELOPMENT.md) and [ops/ARCHITECTURE.md](ops/ARCHITECTURE.md).
 
 For agents, follow [AGENTS.md](AGENTS.md).
-
-## Citation
-
-```bibtex
-@misc{deepseek-harness2026,
-  title={DeepSeek Harness: Everything is a Plugin},
-  author={DeepSeek-AI},
-  year={2026},
-  publisher={GitHub},
-  howpublished={\url{https://github.com/deepseek-ai/deepseek-harness}},
-}
-```
 
 ## License
 
