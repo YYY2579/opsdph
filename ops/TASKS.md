@@ -52,7 +52,8 @@
 - [x] `ops/ARCHITECTURE.md`（扩展点映射与不采用项的原因）
 - [x] `ops/ROADMAP.md`（后续能力槽位与验收）
 - [x] `ops/TASKS.md`（本清单）
-- [ ] `packages/ops/AGENTS.md`（给后续 AI 编码工具的接入约束）
+- [x] `packages/ops/AGENTS.md`（给后续 AI 编码工具的接入约束）
+- [x] `ops/SETUP.md`（本地环境、代理、凭据与已知问题，供换客户端或换机器时重建）
 - [ ] 包 README 通过上游 Model Experience 与 limitations 门禁
 - [ ] 非 trivial 改动补 Agent Note
 
