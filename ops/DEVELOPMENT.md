@@ -89,9 +89,9 @@
 - [x] Phase 2 共享类型：common 类型 + 单测（3 项通过）
 - [x] Phase 3 资产与连接：清单加载 + OpenSSH 传输（参数构造、输出上限、超时、取消）+ 单测（13 项通过）
 - [ ] Phase 4 只读工具：`server_list` / `server_facts`（两个工具均已实现；`server_list` 有真实组合测试，`server_facts` 待接真实 VPS 验收）
-- [ ] Phase 5 执行与审批：`server_exec` / `server_file_read` + 风险分级 + `ctx.approval` 接入
-- [ ] Phase 6 输出与生命周期：`ctx.spillStore` 截断、`timeoutMs`、`AbortSignal` 取消
-- [ ] Phase 7 回放与安全：session 回放一致性 + secret 泄漏校验
+- [x] Phase 5 执行与审批：`server_exec` / `server_file_read` + 风险分级 + `ctx.approval` 接入
+- [x] Phase 6 输出与生命周期：`ctx.spillStore` 截断、`timeoutMs`、`AbortSignal` 取消
+- [x] Phase 7 回放与安全：session 回放一致性 + secret 泄漏校验
 - [ ] Phase 8 契约文档：`packages/ops/AGENTS.md`（AI 工具接入约束）+ `ops/ARCHITECTURE.md` + `ops/ROADMAP.md`
 - [ ] Phase 9 桌面集成：`dev:desktop` 跑通 + `package:desktop:win:x64:unsigned` 出包
 - [ ] Phase 10 端到端验收：VPS 只读排查 nginx 502 + 审批后重启并复验
@@ -164,3 +164,5 @@
 - 2026-09-14：Phase 2 完成；`server_list` 工具落地，真实 Loader 组合测试 3 项通过；`pnpm run constraints` 与 `pnpm run typecheck` 通过。
 - 2026-09-14：Phase 3 完成；新增 `src/ssh.ts` 传输层（系统 OpenSSH、输出上限、超时、取消）与 `server_facts` 工具；ops 测试 13 项通过，typecheck 通过。
 - 2026-09-14：补齐 [ARCHITECTURE.md](ARCHITECTURE.md) 与 [ROADMAP.md](ROADMAP.md)；登记 `tsconfig.base.json` 源别名、`scripts/verify-subsystem-pages.ts` 分组白名单，并由生成器刷新 `docs/module-graph.*`。
+- 2026-09-14：Phase 5 完成；新增 `src/risk.ts` 风险分级（只读 L0 / 变更按环境 L1–L3 / 破坏性 L4）、`tools/pre-execute` 门禁（L0 放行、L1+ 走审批）、`server_file_read` 与 `server_exec` 工具；审批三态走真实 Loader 组合测试（批准执行、拒绝不执行、缺失拒绝、无 agent、未知目标），ops 测试 38 项通过，constraints 与 typecheck 通过。
+- 2026-09-14：Phase 6/7 完成；`spill.spec.ts` 走真实 Loader 组合验证超大 `server_list` 结果经 spill-policy + spill-local 落盘并替换为有界预览与取回定位符；`durability.spec.ts` 验证回放一致性（同调用字节级一致、结果可无损 JSON 重建、审批 `approval/asked`/`approval/decided` 成对落日志）与 secret 校验（keyRef 不出现在模型可见投影与会话事件）；ops 测试 44 项通过，constraints 与 typecheck 通过。`server_facts`/取消与超时的真实主机端到端验收待 VPS（Phase 10）。

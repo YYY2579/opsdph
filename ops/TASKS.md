@@ -32,18 +32,18 @@
 - [x] 传输层单测（参数、截断、超时、取消）
 - [x] `server_facts` 工具实现
 - [ ] `server_facts` 接真实 VPS 端到端验收
-- [ ] `server_file_read` 工具（只读、行数与字节上限）
-- [ ] `server_exec` 工具（按命令判定风险）
+- [x] `server_file_read` 工具（只读、行数与字节上限）
+- [x] `server_exec` 工具（按命令判定风险）
 
 ## D. 安全与生命周期
 
-- [ ] 风险分级 L0–L4 判定规则
-- [ ] `tools/pre-execute` 风险门禁
-- [ ] `ctx.approval` 审批接入（缺失 answerer 时 fail-closed）
-- [ ] 审批三态测试：批准执行、拒绝不执行、缺失拒绝
-- [ ] `ctx.spillStore` 大输出落盘对接
-- [ ] session 回放一致性测试
-- [ ] secret 不出现在模型可见结果的校验
+- [x] 风险分级 L0–L4 判定规则
+- [x] `tools/pre-execute` 风险门禁
+- [x] `ctx.approval` 审批接入（缺失 answerer 时 fail-closed）
+- [x] 审批三态测试：批准执行、拒绝不执行、缺失拒绝
+- [x] `ctx.spillStore` 大输出落盘对接
+- [x] session 回放一致性测试
+- [x] secret 不出现在模型可见结果的校验
 - [ ] 取消与超时的端到端验证（真实主机）
 
 ## E. 契约与文档
