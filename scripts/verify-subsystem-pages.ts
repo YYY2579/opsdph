@@ -19,6 +19,7 @@ export const GROUPS_WITHOUT_SUBSYSTEM_PAGE: Readonly<Record<string, string>> = {
   boot: 'Shared application-bin boot library rather than a runtime subsystem.',
   bundle: 'Composition patch carriers whose mounted packages own all runtime contracts.',
   hooks: 'External hook-protocol bridges over existing interception points, not a new Harness service.',
+  ops: 'Fork-local capability group whose planning document lives at ops/DEVELOPMENT.md rather than the upstream docs/ tree.',
   sdk: 'Out-of-process protocol and client packages whose package READMEs own the SDK contracts.',
   util: 'Low-level primitives whose business semantics remain with their consuming subsystems.',
 }

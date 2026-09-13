@@ -144,6 +144,8 @@
     { "path": "./vendor/hmr" },
     { "path": "./vendor/logger-console" },
     { "path": "./packages/util/brand" },
+    { "path": "./packages/ops/common" },
+    { "path": "./packages/ops/server" },
     { "path": "./packages/util/package-manifest" },
     { "path": "./packages/util/http-proxy" },
     { "path": "./packages/util/launch-environment" },
