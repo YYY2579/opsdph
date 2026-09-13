@@ -54,6 +54,7 @@
 - [x] `ops/TASKS.md`（本清单）
 - [x] `packages/ops/AGENTS.md`（给后续 AI 编码工具的接入约束）
 - [x] `ops/SETUP.md`（本地环境、代理、凭据与已知问题，供换客户端或换机器时重建）
+- [x] `ops/HANDOFF.md`（交给其他人或其他 AI 工具直接上手的提示词）
 - [ ] 包 README 通过上游 Model Experience 与 limitations 门禁
 - [ ] 非 trivial 改动补 Agent Note
 
