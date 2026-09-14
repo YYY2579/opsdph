@@ -1,0 +1,187 @@
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 16px;
+  max-width: 720px;
+}
+
+.title {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.intro {
+  margin: 0;
+  font-size: 13px;
+  color: var(--dsh-text-secondary, #8a8f98);
+}
+
+.muted {
+  margin: 0;
+  font-size: 13px;
+  color: var(--dsh-text-secondary, #8a8f98);
+}
+
+.error {
+  margin: 0;
+  font-size: 13px;
+  color: var(--dsh-danger, #d64545);
+}
+
+.savedNotice {
+  margin: 0;
+  font-size: 13px;
+  color: var(--dsh-success, #3fb950);
+}
+
+.blockTitle {
+  margin: 12px 0 0;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.rows {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 8px 10px;
+  border: 1px solid var(--dsh-border, #333);
+  border-radius: 8px;
+  background: var(--dsh-surface, #1e1f22);
+}
+
+.rowIdentity {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.rowName {
+  font-size: 13px;
+  font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.rowMeta {
+  font-size: 12px;
+  color: var(--dsh-text-secondary, #8a8f98);
+}
+
+.dangerButton,
+.secondaryButton {
+  padding: 5px 10px;
+  font-size: 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  border: 1px solid var(--dsh-border, #333);
+  background: transparent;
+  color: inherit;
+}
+
+.dangerButton:hover {
+  border-color: var(--dsh-danger, #d64545);
+  color: var(--dsh-danger, #d64545);
+}
+
+.secondaryButton:hover {
+  border-color: var(--dsh-accent, #4f8cff);
+  color: var(--dsh-accent, #4f8cff);
+}
+
+.formBlock {
+  margin-top: 8px;
+}
+
+.formTitle {
+  margin: 0 0 8px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 12px;
+  border: 1px solid var(--dsh-border, #333);
+  border-radius: 8px;
+}
+
+.fieldGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.fieldLabel {
+  font-size: 12px;
+  color: var(--dsh-text-secondary, #8a8f98);
+}
+
+.input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 6px 8px;
+  font-size: 13px;
+  border: 1px solid var(--dsh-border, #333);
+  border-radius: 6px;
+  background: var(--dsh-input, #151618);
+  color: inherit;
+}
+
+.selectInput {
+  appearance: auto;
+}
+
+.narrowInput {
+  max-width: 120px;
+}
+
+.formActions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.testPassed {
+  margin: 0;
+  font-size: 13px;
+  color: var(--dsh-success, #3fb950);
+}
+
+.testFailed {
+  margin: 0;
+  font-size: 13px;
+  color: var(--dsh-danger, #d64545);
+}
+
+.deleteDialog {
+  max-width: 420px;
+}
+
+.deleteConfirm {
+  border-color: var(--dsh-danger, #d64545) !important;
+  color: var(--dsh-danger, #d64545) !important;
+}

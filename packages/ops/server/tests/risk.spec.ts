@@ -5,7 +5,7 @@
  */
 
 import { describe, expect, it } from 'vitest'
-import { classifyCommandRisk } from '../src/risk.ts'
+import { classifyCommandRisk, classifyDbQueryRisk } from '../src/risk.ts'
 import type { Environment, RiskLevel } from '@deepseek-ai/dsh-ops-common'
 
 function level(command: string, environment: Environment = 'lab'): RiskLevel {
@@ -145,5 +145,37 @@ describe('classifyCommandRisk destructive commands', () => {
     for (const environment of ['dev', 'staging', 'prod', 'lab'] as const) {
       expect(level('rm -rf /', environment)).toBe('L4')
     }
+  })
+})
+
+describe('classifyDbQueryRisk', () => {
+  it('classifies provably read-only SQL as L0', () => {
+    expect(classifyDbQueryRisk('SELECT * FROM orders', 'mysql')).toBe('L0')
+    expect(classifyDbQueryRisk('  show status', 'mysql')).toBe('L0')
+    expect(classifyDbQueryRisk('EXPLAIN SELECT 1', 'postgres')).toBe('L0')
+    expect(classifyDbQueryRisk('describe users', 'mysql')).toBe('L0')
+    expect(classifyDbQueryRisk('SELECT 1;', 'postgres')).toBe('L0')
+    expect(classifyDbQueryRisk('-- comment\nSELECT 1', 'mysql')).toBe('L0')
+  })
+
+  it('classifies mutating SQL as L1', () => {
+    expect(classifyDbQueryRisk('DELETE FROM orders', 'mysql')).toBe('L1')
+    expect(classifyDbQueryRisk('UPDATE users SET name=1', 'postgres')).toBe('L1')
+    expect(classifyDbQueryRisk('DROP TABLE orders', 'mysql')).toBe('L1')
+    expect(classifyDbQueryRisk('INSERT INTO t VALUES (1)', 'postgres')).toBe('L1')
+  })
+
+  it('classifies read-only Redis commands as L0 and writes as L1', () => {
+    expect(classifyDbQueryRisk('INFO', 'redis')).toBe('L0')
+    expect(classifyDbQueryRisk('GET cache:key', 'redis')).toBe('L0')
+    expect(classifyDbQueryRisk('KEYS user:*', 'redis')).toBe('L0')
+    expect(classifyDbQueryRisk('SET cache:key 1', 'redis')).toBe('L1')
+    expect(classifyDbQueryRisk('FLUSHALL', 'redis')).toBe('L1')
+    expect(classifyDbQueryRisk('DEL cache:key', 'redis')).toBe('L1')
+  })
+
+  it('treats a blank command as mutating', () => {
+    expect(classifyDbQueryRisk('', 'mysql')).toBe('L1')
+    expect(classifyDbQueryRisk('   ', 'redis')).toBe('L1')
   })
 })

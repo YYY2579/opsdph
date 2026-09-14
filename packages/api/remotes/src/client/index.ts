@@ -113,6 +113,10 @@ export type { CredentialInfo } from '@deepseek-ai/dsh-credentials/types'
 export type {
   SettingsDescribeValue, SettingsNamespaceView, SettingsPathOpView, SettingsSecretView,
 } from '@deepseek-ai/dsh-settings/types'
+// Managed-target vocabulary for the ops namespace (credentials never ride it).
+export type {
+  DbInputWire, OpsDbView, OpsProbeResult, OpsServerView, ServerInputWire,
+} from '@deepseek-ai/dsh-api-settings-controller/types'
 // Provider registry and discovery vocabulary for the llm namespace.
 export type {
   LlmConfigurableProvider, LlmDiscoveredModel,

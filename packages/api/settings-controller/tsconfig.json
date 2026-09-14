@@ -27,6 +27,12 @@
       "path": "../../util/native-command"
     },
     {
+      "path": "../../ops/common"
+    },
+    {
+      "path": "../../ops/server"
+    },
+    {
       "path": "../../settings/settings"
     },
     {

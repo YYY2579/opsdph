@@ -23,6 +23,8 @@ export interface RemoteCommandRequest {
   readonly username: string
   /** Path of the OpenSSH private key; omitted means the OpenSSH default identity or agent. */
   readonly keyRef?: string
+  /** Password for password authentication; routed through `sshpass`, which must be on PATH. */
+  readonly password?: string
   /** The complete remote command line, run by the remote login shell. */
   readonly command: string
   /** Hard limit on the whole command; the transport kills the client when it expires. */
@@ -57,8 +59,8 @@ export interface SshChild {
   kill(signal?: NodeJS.Signals): boolean
 }
 
-/** Builds one SSH client process from the resolved argument list. */
-export type SshSpawner = (args: readonly string[]) => SshChild
+/** Builds one SSH client process from the resolved executable and argument list. */
+export type SshSpawner = (executable: string, args: readonly string[]) => SshChild
 
 /** Non-interactive SSH flags: no password prompt, no host-key prompt, bounded connect. */
 const CONNECT_OPTIONS = [
@@ -88,11 +90,29 @@ export function buildSshArgs(request: Pick<
   return args
 }
 
-/** The default spawner: the host `ssh` client with no inherited standard input. */
-const systemSpawn: SshSpawner = args => spawn('ssh', [...args], {
+/** The default spawner: the host `ssh` (or `sshpass` for passwords) client with no inherited standard input. */
+const systemSpawn: SshSpawner = (executable, args) => spawn(executable, [...args], {
   stdio: ['ignore', 'pipe', 'pipe'],
   windowsHide: true,
 }) as unknown as SshChild
+
+/**
+ * Resolve the client executable and its argument list for one request: a
+ * password routes through `sshpass` (which must be on PATH), anything else
+ * through the host `ssh` client directly.
+ * @param request - the resolved remote command request.
+ * @returns the executable and its full argument list.
+ */
+export function buildSshInvocation(request: Pick<
+  RemoteCommandRequest,
+  'host' | 'port' | 'username' | 'keyRef' | 'password' | 'command' | 'timeoutMs'
+>): { readonly executable: string; readonly args: string[] } {
+  const sshArgs = buildSshArgs(request)
+  if (request.password === undefined || request.password === '') {
+    return { executable: 'ssh', args: sshArgs }
+  }
+  return { executable: 'sshpass', args: ['-p', request.password, 'ssh', ...sshArgs] }
+}
 
 /**
  * Run one remote command, bounding retained output and enforcing the timeout.
@@ -140,8 +160,9 @@ export function runRemoteCommand(
       child.kill()
     }, request.timeoutMs)
 
+    const { executable, args } = buildSshInvocation(request)
     try {
-      child = spawner(buildSshArgs(request))
+      child = spawner(executable, args)
     } catch (error) {
       clearTimeout(timer)
       reject(error instanceof Error ? error : new Error(String(error)))

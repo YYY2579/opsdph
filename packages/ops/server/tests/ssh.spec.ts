@@ -6,7 +6,7 @@
  */
 
 import { describe, expect, it } from 'vitest'
-import { buildSshArgs, runRemoteCommand } from '../src/ssh.ts'
+import { buildSshArgs, buildSshInvocation, runRemoteCommand } from '../src/ssh.ts'
 import type { SshChild } from '../src/ssh.ts'
 
 interface FakeChild {
@@ -83,6 +83,15 @@ describe('ssh argument construction', () => {
 
   it('never derives a connect timeout below one second', () => {
     expect(buildSshArgs({ ...REQUEST, timeoutMs: 250 })).toContain('ConnectTimeout=1')
+  })
+
+  it('routes a password through sshpass and a key through ssh directly', () => {
+    const withPassword = buildSshInvocation({ ...REQUEST, password: 'pw' })
+    expect(withPassword.executable).toBe('sshpass')
+    expect(withPassword.args[0]).toBe('-p')
+    expect(withPassword.args[1]).toBe('pw')
+    expect(withPassword.args[2]).toBe('ssh')
+    expect(buildSshInvocation(REQUEST).executable).toBe('ssh')
   })
 })
 

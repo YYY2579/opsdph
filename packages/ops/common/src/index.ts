@@ -5,7 +5,7 @@
  */
 
 import { brandString } from '@deepseek-ai/dsh-brand'
-import type { ServerId } from './types.ts'
+import type { ServerId, DbId } from './types.ts'
 
 export type * from './types.ts'
 
@@ -15,6 +15,9 @@ export const ENVIRONMENTS = ['dev', 'staging', 'prod', 'lab'] as const
 /** The risk levels an ops operation may carry, ascending from read-only to destructive. */
 export const RISK_LEVELS = ['L0', 'L1', 'L2', 'L3', 'L4'] as const
 
+/** The database engines a managed database target may declare. */
+export const DB_KINDS = ['mysql', 'redis', 'postgres'] as const
+
 /**
  * Brand one inventory-declared server id.
  * @param value - id declared by the owning inventory.
@@ -22,4 +25,13 @@ export const RISK_LEVELS = ['L0', 'L1', 'L2', 'L3', 'L4'] as const
  */
 export function brandServerId(value: string): ServerId {
   return brandString<ServerId>(value)
+}
+
+/**
+ * Brand one inventory-declared database id.
+ * @param value - id declared by the owning inventory.
+ * @returns the same string carrying the ops database brand.
+ */
+export function brandDbId(value: string): DbId {
+  return brandString<DbId>(value)
 }

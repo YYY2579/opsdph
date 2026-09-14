@@ -7,7 +7,7 @@
  * @module @deepseek-ai/dsh-ops-server/risk
  */
 
-import type { Environment, RiskLevel } from '@deepseek-ai/dsh-ops-common'
+import type { DbKind, Environment, RiskLevel } from '@deepseek-ai/dsh-ops-common'
 
 /**
  * Primary verbs whose bare use reads without changing remote state. A command
@@ -165,4 +165,35 @@ export function classifyCommandRisk(command: string, environment: Environment): 
   if (segments.length === 0) return escalation(environment)
   if (DESTRUCTIVE_PATTERNS.some(pattern => pattern.test(command))) return 'L4'
   return segments.every(isReadSegment) ? 'L0' : escalation(environment)
+}
+
+/** SQL leading verbs that provably read; any other leading verb asks. */
+const READ_ONLY_SQL_VERBS = new Set(['select', 'show', 'explain', 'describe', 'desc', 'pragma', 'with'])
+
+/** Redis leading verbs that provably read; any other leading verb asks. */
+const READ_ONLY_REDIS_VERBS = new Set([
+  'info', 'dbsize', 'ping', 'get', 'mget', 'hget', 'hgetall', 'hlen', 'hkeys', 'hvals',
+  'llen', 'lrange', 'scard', 'smembers', 'zcard', 'zrange', 'ttl', 'type', 'exists',
+  'keys', 'scan', 'strlen', 'getrange', 'srandmember', 'echo', 'time',
+])
+
+/**
+ * Classify one read-only database command by its leading verb. SQL comments,
+ * trailing semicolons, and case are tolerated; anything whose leading verb is
+ * absent from the read-only set classifies as a mutation (ask).
+ * @param command - the database command text.
+ * @param kind - the target database engine.
+ * @returns `L0` for a provably read-only command, `L1` otherwise.
+ */
+export function classifyDbQueryRisk(command: string, kind: DbKind): RiskLevel {
+  const stripped = command
+    .replace(/^[\s;]+/u, '')
+    .replace(/^\/\*[\s\S]*?\*\//u, '')
+    .replace(/^--[^\n]*\n?/u, '')
+    .trim()
+    .replace(/;+\s*$/u, '')
+  const verb = stripped.split(/\s+/u, 1)[0]?.toLowerCase()
+  if (verb === undefined || verb === '') return 'L1'
+  const readSet = kind === 'redis' ? READ_ONLY_REDIS_VERBS : READ_ONLY_SQL_VERBS
+  return readSet.has(verb) ? 'L0' : 'L1'
 }
