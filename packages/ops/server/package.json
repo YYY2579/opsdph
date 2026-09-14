@@ -19,13 +19,20 @@
       "default": "./lib/index.js"
     },
     "./src/*": "./src/*",
+    "./cordis.patch.yml": "./cordis.patch.yml",
     "./package.json": "./package.json"
   },
   "files": [
     "lib/index.js",
+    "cordis.patch.yml",
     "lib/types/**/*.d.ts"
   ],
   "license": "MIT",
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    }
+  },
   "dependencies": {
     "@deepseek-ai/schemastery": "workspace:^"
   },

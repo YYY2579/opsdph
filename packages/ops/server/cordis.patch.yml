@@ -1,0 +1,12 @@
+# The dsh-ops-server external-plugin bundle patch. It inserts the ops server
+# capability as one row into a profile that already mounts the base rows
+# (dsh-tools, dsh-system-prompt, dsh-user-approval, dsh-spill-*). The managed
+# server inventory is deployment configuration and therefore belongs to the
+# profile, not to this patch: the row carries an empty default list, and the
+# profile that enables this plugin overrides `servers` with its own inventory.
+
+- insert:
+    - id: ops-server
+      name: '@deepseek-ai/dsh-ops-server'
+      config:
+        servers: []
