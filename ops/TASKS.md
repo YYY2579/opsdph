@@ -60,9 +60,9 @@
 
 ## F. 桌面与交付
 
-- [ ] 把 ops 包挂进桌面 profile（external plugin）
+- [x] 把 ops 包挂进桌面 profile（external plugin）
 - [ ] `pnpm run dev:desktop` 跑通并加载 ops 插件
-- [ ] `pnpm run package:desktop:win:x64:unsigned` 出安装包
+- [ ] `pnpm run package:desktop:win:x64:unsigned` 出安装包（改走 GitHub Actions 托管：`desktop-package-unsigned.yml`，workflow 跑通后勾选）
 - [ ] 应用名与图标替换为最终品牌
 - [ ] 自建更新源与代码签名（第二阶段）
 
