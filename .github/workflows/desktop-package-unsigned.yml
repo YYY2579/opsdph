@@ -105,4 +105,4 @@ jobs:
             apps/desktop/.desktop-build/targets/win-x64/unsigned-artifacts/*.exe
             apps/desktop/.desktop-build/targets/win-x64/unsigned-artifacts/*.blockmap
           fail_on_unmatched_files: false
-          draft: true
+          draft: false
