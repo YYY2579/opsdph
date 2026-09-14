@@ -22,7 +22,7 @@ concurrency:
   cancel-in-progress: true
 
 permissions:
-  contents: read
+  contents: write
   actions: write
 
 env:
@@ -85,3 +85,24 @@ jobs:
           path: apps/desktop/.desktop-build/targets/win-x64/unsigned-artifacts/
           if-no-files-found: error
           retention-days: 14
+
+      # Manual runs publish the installer to the Releases page (tag carries the
+      # run number so a repeat manual run gets a fresh tag). Push runs keep the
+      # artifact-only path for fast iteration and do not spam releases.
+      - name: Publish installer to GitHub Releases
+        if: github.event_name == 'workflow_dispatch'
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v0.1.5-rc.2-ops.${{ github.run_number }}
+          name: DeepSeek Harness ops build ${{ github.run_number }}
+          body: |
+            Unsigned Windows x64 build of commit ${{ github.sha }}.
+
+            Includes the `dsh-ops-server` external-plugin bundle; enable it
+            from the desktop plugin manager and supply the managed servers in
+            the desktop profile.
+          files: |
+            apps/desktop/.desktop-build/targets/win-x64/unsigned-artifacts/*.exe
+            apps/desktop/.desktop-build/targets/win-x64/unsigned-artifacts/*.blockmap
+          fail_on_unmatched_files: false
+          draft: true
