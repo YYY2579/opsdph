@@ -29,7 +29,7 @@ env:
   NODE_VERSION: '24'
   # The desktop shell reads this to register the release identity; the value is
   # an app id for the unsigned artifact (no signing credentials are involved).
-  DSH_DESKTOP_APP_ID: ${{ inputs.app_id != '' && inputs.app_id || vars.DSH_DESKTOP_APP_ID }}
+  DSH_DESKTOP_APP_ID: ${{ inputs.app_id != '' && inputs.app_id || vars.DSH_DESKTOP_APP_ID || 'com.dsh.opsdph' }}
 
 jobs:
   package-win-x64-unsigned:
