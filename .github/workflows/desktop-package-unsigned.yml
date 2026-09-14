@@ -54,6 +54,16 @@ jobs:
         shell: pwsh
         run: pnpm install --frozen-lockfile
 
+      # The frozen baseline (c291e796) predates the upstream commit that added
+      # fs-ext to the desktop packaging closure, so the native payload smoke
+      # in prepare:dsh cannot resolve it. This injects fs-ext into the
+      # @deepseek-ai/dsh aggregate ONLY in this build's working copy (never
+      # committed) so the packed dsh closure carries it and the smoke passes.
+      # fs-ext is native; the Windows runner's VS build tools compile it.
+      - name: Inject fs-ext into the dsh closure (working copy only)
+        shell: pwsh
+        run: pnpm --filter @deepseek-ai/dsh add fs-ext@2.1.1
+
       - name: Package Windows x64 unsigned
         shell: pwsh
         run: pnpm run package:desktop:win:x64:unsigned
