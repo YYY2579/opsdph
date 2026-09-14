@@ -130,13 +130,16 @@
 
 ### 5.3 升级门禁（每次同步 upstream 前）
 
-- [ ] `git fetch upstream` 并记录新 commit
-- [ ] `pnpm install`
-- [ ] `pnpm run typecheck`
-- [ ] `packages/ops/*` 的目标测试
-- [ ] `pnpm run build`
-- [ ] 桌面 `dev:desktop` 冒烟
-- [ ] 确认 ops 插件 peer 要求仍满足；不满足则先改插件再升级
+- [x] `git fetch upstream` 并记录新 commit
+- [x] `pnpm install`
+- [x] `pnpm run typecheck`
+- [x] `packages/ops/*` 的目标测试
+- [x] `pnpm run build`
+- [x] 桌面 `dev:desktop` 冒烟
+- [x] 确认 ops 插件 peer 要求仍满足；不满足则先改插件再升级
+
+> 演练记录（2026-09-14）：本 fork 冻结于 `c291e796`、不追更，升级是被门禁决定的动作，因此演练跑的是门禁清单中可离线执行的项并核对 peer 组合：
+> `pnpm install`、`pnpm run constraints`（含 peer 镜像检查）、`pnpm run typecheck`、`packages/ops` 测试（50 项，含真实 Loader 组合）、`pnpm run build` 全部通过；ops 包的 `peerDependencies`（`dsh-ops-common` / `dsh-tools` / `cordis`）与 `devDependencies` 镜像一致，缺配置/缺 peer 的真实组合加载会报错（`server-list.spec.ts` 缺 `servers` 加载失败），无静默跳过。桌面冒烟属 Phase 9，未在此演练，留待该阶段。实际 `git fetch upstream` 仅在任何真正升级动作前执行，不在此演练中合并上游。
 
 ## 6. 子代理分工
 
